@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  pull_request:
+    branches: ["*"] # Triggers the workflow on any pull request
+  push:
+    branches: ["main", "mobile_dev_preview"] # Triggers the workflow when code is pushed to main or mobile_dev_preview branches
+  merge_group: # Triggers the workflow when pull requests are added to a merge queue
+
+concurrency:
+  # This configuration manages concurrent workflow runs:
+  # - 'group' creates a unique identifier for this workflow based on the workflow name and branch
+  # - 'cancel-in-progress' automatically cancels any in-progress workflow runs on the same branch
+  #   except for the 'main' branch, where all runs are preserved
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  FORCE_COLOR: 3
+  NUTS: ${{ vars.NUTS }}
+
+jobs:
+  # Unit tests for the application
+  # This job runs all test suites without requiring a full build or application startup
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy env
+        shell: bash
+        run: |
+          echo "POSTGRES_URL=${NUTS}" >> .env
