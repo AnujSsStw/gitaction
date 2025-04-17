@@ -30,4 +30,4 @@ jobs:
       - name: Copy env
         shell: bash
         run: |
-          echo "POSTGRES_URL=${NUTS}" >> .env
+          echo $NUTS
