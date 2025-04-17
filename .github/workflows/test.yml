@@ -17,7 +17,7 @@ concurrency:
 
 env:
   FORCE_COLOR: 3
-  NUTS: ${{ vars.NUTS }}
+  NUTS: ${{ secrets.NUTS }}
 
 jobs:
   # Unit tests for the application
